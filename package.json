@@ -4,6 +4,7 @@
   "description": "A Desktop Application for the Bulk Provision of Cisco UCCX Configs",
   "main": "main.js",
   "scripts": {
+    "start": "electron .",
     "build": "webpack",
     "watch": "webpack --watch"
   },
