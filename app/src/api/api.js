@@ -1,5 +1,6 @@
+'use strict';
 var EventEmitter = require('events').EventEmitter,
-    http = require('http');
+    UCCX = require('csco-uccx');
 
 // Global Events
 global.loginEvt = new EventEmitter();
@@ -7,29 +8,22 @@ global.loggedIn = new EventEmitter();
 
 // Global VARs
 global.credentials = {};
+global.uccx = Object;
 
 loginEvt.on('login', (creds) => {
   // Verify We Can Login to UCCX Server
-  var data = '';
-  var request = http.request({
-    host: creds.ip,
-    path: '/adminapi/skill',
-    method: 'GET',
-    port: 80,
-    auth: `${creds.user}:${creds.pass}`,
-    headers: {
-      'Accept' : 'application/json'
-    },
-  }, (res) => {
-    res.setEncoding('utf8');
-    res.on('data', (chunk) => {
-      data += chunk;
-    });
-    res.on('end', () => {
-      console.log(data);
-      loggedIn.emit('loggedIn', data);
-    });
+  let ip = creds.ip,
+      user = creds.user,
+      pass = creds.pass;
+  uccx = UCCX({
+    uri: `https://${creds.ip}/adminapi`,
+    user: creds.user,
+    pass: creds.pass
   });
-
-  request.end();
+  uccx.getStats()
+    .then(resp => {
+      credentials = {ip, user, pass};
+      loggedIn.emit('loggedIn', resp)
+    })
+    .catch(err => loggedIn.emit('loginError', err))
 });
