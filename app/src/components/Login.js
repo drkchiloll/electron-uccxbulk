@@ -1,4 +1,5 @@
 import React from 'react';
+import config from '../../../config';
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -14,18 +15,29 @@ export default class Login extends React.Component {
     let [ip, user, pass] =
       [this.refs.ip.value, this.refs.user.value, this.refs.pass.value];
     loginEvt.emit('login', {ip: ip, user: user, pass: pass});
-    loggedIn.on('loggedIn', (skills) => {
-      console.log(skills);
-    })
+    this.props.login();
   }
   render() {
+    var err;
+    var msg = this.props.message;
     var displayLogin = this.dispLogin();
     var dcreds = {
-      s: '', u: '', p: ''
+      s: config.i, u: config.u, p: config.p
     };
+    if(msg && msg.name === 'StatusCodeError') {
+      err = true;
+    }
     return (
       <div style={displayLogin} className='panel panel-primary'>
-        <h4 className='col-sm-offset-1'> UCCX Login </h4>
+        <div className='col-sm-12'>
+          <h4 className='col-sm-offset-1 col-sm-4'> UCCX Login </h4>
+          <button
+            disabled
+            style={{display: err ? 'block': 'none'}}
+            className='col-sm-offset-10 btn btn-danger'>
+            <span className='badge'>Auth Error</span>
+          </button>
+        </div>
         <div
           style={{margin: '20px 20px 20px 20px'}}
           className='form-horizontal'>
@@ -34,6 +46,7 @@ export default class Login extends React.Component {
             <div className='col-sm-10'>
               <input
                 ref='ip'
+                defaultValue={dcreds.s}
                 type='text'
                 className='form-control'
                 placeholder='Server IP'/>
@@ -44,6 +57,7 @@ export default class Login extends React.Component {
             <div className='col-sm-10'>
               <input
                 ref='user'
+                defaultValue={dcreds.u}
                 type='text'
                 className='form-control'
                 placeholder='User Id'/>
@@ -54,6 +68,7 @@ export default class Login extends React.Component {
             <div className='col-sm-10'>
               <input
                 ref='pass'
+                defaultValue={dcreds.p}
                 type='password'
                 className='form-control'
                 placeholder='Password'/>
