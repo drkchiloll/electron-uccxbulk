@@ -9,13 +9,43 @@ export default class Skills extends React.Component {
       skill: null
     };
   }
+  _renderSkillTable() {
+    var skillData;
+    uccx.skill({method: 'GET'}).then(skills => {
+      skillData = skills.skill.map(skill => {
+        return (
+          <tr key={skill.skillId}>
+            <td>{skill.skillName}</td>
+            <td className='col-sm-2'>
+              <button className='btn btn-xs btn-danger'
+                      onClick={this._deleteSkill.bind(this)}
+                      id={skill.self}>
+                Delete
+              </button>
+            </td>
+          </tr>
+        );
+      });
+      skillData.push(
+        <tr key={'nextskill'}
+            onClick={this._addInput.bind(this)}>
+          <td><button className='btn btn-xs btn-block'>Add Skill</button></td>
+          <td></td>
+        </tr>
+      );
+      this.setState({
+        skills: skills.skill,
+        skillData: skillData
+      });
+    })
+  }
   render() {
     return (
       <div className='row'>
         <div className='col-sm-6'>
           <table className='table table-bordered'>
             <thead>
-              <tr><th>Name</th><th></th></tr>
+              <tr><th>SkillName</th><th></th></tr>
             </thead>
             <tbody>
               {this.state.skillData}
@@ -26,30 +56,9 @@ export default class Skills extends React.Component {
     );
   }
   componentDidUpdate(prevProps, prevState) {
-    var skillData;
     if(this.props.loggedIn) {
       if(!this.state.skills) {
-        uccx.skill({method: 'GET'}).then(skills => {
-          skillData = skills.skill.map(skill => {
-            return (
-              <tr key={skill.skillId}>
-                <td>{skill.skillName}</td>
-                <td></td>
-              </tr>
-            );
-          });
-          skillData.push(
-            <tr key={'nextskill'}
-                onClick={this._addInput.bind(this)}>
-              <td><button className='btn btn-xs btn-block'>Add Skill</button></td>
-              <td></td>
-            </tr>
-          );
-          this.setState({
-            skills: skills.skill,
-            skillData: skillData
-          });
-        });
+        this._renderSkillTable();
       }
     }
   }
@@ -77,10 +86,16 @@ export default class Skills extends React.Component {
       method: 'POST',
       skill: this.state.skill
     }).then((newSkill) => {
-      console.log(newSkill);
+      this._renderSkillTable();
     })
   }
   _setSkill(e) {
     this.setState({skill: e.target.value});
+  }
+  _deleteSkill(e) {
+    uccx.request({method: 'DELETE', uri: e.target.id}).then(resp => {
+      console.log(resp);
+      this._renderSkillTable();
+    });
   }
 }
