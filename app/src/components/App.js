@@ -1,5 +1,6 @@
 import React from 'react';
 import Login from './Login';
+import Skills from './Skills';
 
 export default class App extends React.Component {
   constructor() {
@@ -22,16 +23,14 @@ export default class App extends React.Component {
   render() {
     return (
       <div>
-        <Login
-          login={this.login}
-          loggedIn={this.state.loggedIn}
-          message={this.state.message}/>
+        <Login login={this.login}
+               loggedIn={this.state.loggedIn}
+               message={this.state.message}/>
         {/* Other Stuff Here */}
-        <div
-          style={{display: this.state.loggedIn ? 'block': 'none'}}
-          className='panel panel-primary'>
+        <div style={{display: this.state.loggedIn ? 'block': 'none'}}
+             className='panel panel-primary'>
           <div style={{margin: '20px 20px 20px 20px'}}>
-            New Stuff Here
+            <Skills loggedIn={this.state.loggedIn}/>
           </div>
         </div>
       </div>
