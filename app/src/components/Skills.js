@@ -16,23 +16,17 @@ export default class Skills extends React.Component {
         return (
           <tr key={skill.skillId}>
             <td>{skill.skillName}</td>
-            <td className='col-sm-2'>
-              <button className='btn btn-xs btn-danger'
-                      onClick={this._deleteSkill.bind(this)}
-                      id={skill.self}>
-                Delete
+            <td className='col-sm-1'>
+              <button className='btn btn-md btn-link glyphicon glyphicon-trash'
+                    style={{color: 'red'}}
+                    onClick={this._deleteSkill.bind(this)}
+                    id={skill.self}>
               </button>
             </td>
           </tr>
         );
       });
-      skillData.push(
-        <tr key={'nextskill'}
-            onClick={this._addInput.bind(this)}>
-          <td><button className='btn btn-xs btn-block'>Add Skill</button></td>
-          <td></td>
-        </tr>
-      );
+      skillData.push(this._skillButton());
       this.setState({
         skills: skills.skill,
         skillData: skillData
@@ -63,11 +57,16 @@ export default class Skills extends React.Component {
     }
   }
   _addInput() {
-    var len = this.state.skillData.length - 1;
-    var input = this.state.skillData[len];
+    var input;
+    var skillData = this.state.skillData;
+    var len = skillData.length - 1;
     input = (
-      <tr key={'nextskill'}>
-        <td><input type='text' onChange={this._setSkill.bind(this)}/></td>
+      <tr key={'addskill'}>
+        <td>
+          <input autoFocus
+                 type='text'
+                 onChange={this._setSkill.bind(this)}/>
+        </td>
         <td>
           <button className='btn btn-xs btn-block'
                   onClick={this._addSkill.bind(this)}>
@@ -76,7 +75,8 @@ export default class Skills extends React.Component {
         </td>
       </tr>
     );
-    this.state.skillData[len] = input;
+    skillData[len] = input;
+    skillData.push(this._skillButton())
     this.setState({
       skillData: this.state.skillData
     });
@@ -97,5 +97,14 @@ export default class Skills extends React.Component {
       console.log(resp);
       this._renderSkillTable();
     });
+  }
+  _skillButton() {
+    return (
+      <tr key={'nextskill'}
+          onClick={this._addInput.bind(this)}>
+        <td><button className='btn btn-xs btn-block'>Add Skill</button></td>
+        <td></td>
+      </tr>
+    );
   }
 }
