@@ -16,7 +16,7 @@ export default class Skills extends React.Component {
         return (
           <tr key={skill.skillId}>
             <td>{skill.skillName}</td>
-            <td className='col-sm-1'>
+            <td className='col-sm-2'>
               <button className='btn btn-md btn-link glyphicon glyphicon-trash'
                     style={{color: 'red'}}
                     onClick={this._deleteSkill.bind(this)}
@@ -36,7 +36,7 @@ export default class Skills extends React.Component {
   render() {
     return (
       <div className='row'>
-        <div className='col-sm-6'>
+        <div className='col-sm-offset-3 col-sm-6'>
           <table className='table table-bordered'>
             <thead>
               <tr><th>SkillName</th><th></th></tr>
@@ -68,15 +68,19 @@ export default class Skills extends React.Component {
                  onChange={this._setSkill.bind(this)}/>
         </td>
         <td>
-          <button className='btn btn-xs btn-block'
+          <button className='btn btn-xs btn-link glyphicon glyphicon-plus'
+                  style={{color: 'green'}}
                   onClick={this._addSkill.bind(this)}>
-            Add
+          </button>
+          <button className='btn btn-xs btn-link glyphicon glyphicon-alert'
+                  style={{color: 'red'}}
+                  onClick={this._resetCell.bind(this)}>
           </button>
         </td>
       </tr>
     );
     skillData[len] = input;
-    skillData.push(this._skillButton())
+    skillData.push(this._skillButton(1))
     this.setState({
       skillData: this.state.skillData
     });
@@ -94,17 +98,23 @@ export default class Skills extends React.Component {
   }
   _deleteSkill(e) {
     uccx.request({method: 'DELETE', uri: e.target.id}).then(resp => {
-      console.log(resp);
       this._renderSkillTable();
     });
   }
-  _skillButton() {
+  _skillButton(idx) {
     return (
-      <tr key={'nextskill'}
+      <tr key={'nextskill' + idx}
           onClick={this._addInput.bind(this)}>
         <td><button className='btn btn-xs btn-block'>Add Skill</button></td>
         <td></td>
       </tr>
     );
+  }
+  _resetCell() {
+    var skillData = this.state.skillData;
+    var len = skillData.length - 2;
+    skillData[len] = this._skillButton(2);
+    skillData.pop();
+    this.setState({skillData: skillData});
   }
 }
