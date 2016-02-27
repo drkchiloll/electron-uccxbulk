@@ -1,11 +1,14 @@
 import React from 'react';
 import Login from './Login';
+import Navigation from './Navigation';
+import Resources from './Resources';
 import Skills from './Skills';
 
 export default class App extends React.Component {
   constructor() {
     super();
     this.state = {
+      activeTab: 'skills',
       creds: {},
       message: null,
       loggedIn: false
@@ -26,14 +29,20 @@ export default class App extends React.Component {
         <Login login={this.login}
                loggedIn={this.state.loggedIn}
                message={this.state.message}/>
-        {/* Other Stuff Here */}
+
         <div style={{display: this.state.loggedIn ? 'block': 'none'}}
              className='panel panel-primary'>
+          <Navigation activeTab={this.state.activeTab}
+                      onSetTab={this._setTab.bind(this)}/>
+
           <div style={{margin: '20px 20px 20px 20px'}}>
             <Skills loggedIn={this.state.loggedIn}/>
           </div>
         </div>
       </div>
     );
+  }
+  _setTab(activeTab) {
+    this.setState({activeTab});
   }
 }
