@@ -15,6 +15,14 @@ export default class Navigation extends React.Component {
           <a id='resources'
              onClick={this._setTab.bind(this)}>Resources</a>
         </li>
+        <li role='presentation'
+            className={activeTab==='logout' ? 'active' : ''}>
+          <a id='logout'
+             onClick={this.props.onLogout}>
+             <span className='glyphicon glyphicon-log-out'
+                   style={{color: 'red', fontSize: '1.2em'}}></span>
+          </a>
+        </li>
       </ul>
     );
   }
