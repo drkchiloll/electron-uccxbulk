@@ -14,6 +14,7 @@ export default class App extends React.Component {
       loggedIn: false
     };
     this.login = this.login.bind(this);
+    this._logout = this._logout.bind(this);
   }
   login() {
     loggedIn.on('loggedIn', (stats) => {
@@ -23,7 +24,12 @@ export default class App extends React.Component {
       this.setState({message: status});
     })
   }
+  _logout() {
+    uccx = null;
+    this.setState({loggedIn: false});
+  }
   render() {
+    var tab = this.state.activeTab;
     return (
       <div>
         <Login login={this.login}
@@ -33,10 +39,20 @@ export default class App extends React.Component {
         <div style={{display: this.state.loggedIn ? 'block': 'none'}}
              className='panel panel-primary'>
           <Navigation activeTab={this.state.activeTab}
+                      onLogout={this._logout}
                       onSetTab={this._setTab.bind(this)}/>
 
-          <div style={{margin: '20px 20px 20px 20px'}}>
+          <div style={{
+            display: tab==='skills' ? 'block' : 'none',
+            margin: '20px 20px 20px 20px'
+          }}>
             <Skills loggedIn={this.state.loggedIn}/>
+          </div>
+          <div style={{
+            display: tab==='resources' ? 'block' : 'none',
+            margin: '20px 20px 20px 20px'
+          }}>
+            <Resources loggedIn={this.state.loggedIn}/>
           </div>
         </div>
       </div>
