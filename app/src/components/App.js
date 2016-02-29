@@ -36,23 +36,19 @@ export default class App extends React.Component {
                loggedIn={this.state.loggedIn}
                message={this.state.message}/>
 
-        <div style={{display: this.state.loggedIn ? 'block': 'none'}}
+        <div style={this._mainPanelStyle()}
              className='panel panel-primary'>
-          <Navigation activeTab={this.state.activeTab}
-                      onLogout={this._logout}
-                      onSetTab={this._setTab.bind(this)}/>
+          <div style={this._mainBodStyle()}>
+            <Navigation activeTab={this.state.activeTab}
+                        onLogout={this._logout}
+                        onSetTab={this._setTab.bind(this)}/>
 
-          <div style={{
-            display: tab==='skills' ? 'block' : 'none',
-            margin: '20px 20px 20px 20px'
-          }}>
-            <Skills loggedIn={this.state.loggedIn}/>
-          </div>
-          <div style={{
-            display: tab==='resources' ? 'block' : 'none',
-            margin: '20px 20px 20px 20px'
-          }}>
-            <Resources loggedIn={this.state.loggedIn}/>
+            <div style={this._whichTab(tab, 'skills')}>
+              <Skills loggedIn={this.state.loggedIn}/>
+            </div>
+            <div style={this._whichTab(tab, 'resources')}>
+              <Resources loggedIn={this.state.loggedIn}/>
+            </div>
           </div>
         </div>
       </div>
@@ -60,5 +56,24 @@ export default class App extends React.Component {
   }
   _setTab(activeTab) {
     this.setState({activeTab});
+  }
+  _mainPanelStyle() {
+    return {
+      display: this.state.loggedIn ? 'block': 'none'
+    };
+  }
+  _mainBodStyle() {
+    return {
+      margin: '25px 0 0 0'
+    };
+  }
+  _whichTab(actab, tab) {
+    switch(actab) {
+      case 'skills':
+      case 'resources':
+        return {
+          display: tab===actab ? 'block' : 'none'
+        };
+    }
   }
 }
