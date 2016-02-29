@@ -36,7 +36,7 @@ export default class Skills extends React.Component {
   render() {
     return (
       <div className='row'>
-        <div className='col-sm-offset-3 col-sm-6'>
+        <div className='col-sm-6'>
           <table className='table table-bordered'>
             <thead>
               <tr><th>SkillName</th><th></th></tr>
