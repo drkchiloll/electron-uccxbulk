@@ -11,10 +11,12 @@ export default class App extends React.Component {
       activeTab: 'skills',
       creds: {},
       message: null,
-      loggedIn: false
+      loggedIn: false,
+      resources: []
     };
     this.login = this.login.bind(this);
     this._logout = this._logout.bind(this);
+    this._setRsrcs = this._setRsrcs.bind(this);
   }
   login() {
     loggedIn.on('loggedIn', (stats) => {
@@ -47,7 +49,9 @@ export default class App extends React.Component {
               <Skills loggedIn={this.state.loggedIn}/>
             </div>
             <div style={this._whichTab(tab, 'resources')}>
-              <Resources loggedIn={this.state.loggedIn}/>
+              <Resources loggedIn={this.state.loggedIn}
+                         onRsrcs={this._setRsrcs}
+                         resources={this.state.resources}/>
             </div>
           </div>
         </div>
@@ -64,7 +68,7 @@ export default class App extends React.Component {
   }
   _mainBodStyle() {
     return {
-      margin: '25px 0 0 0'
+      margin: '25px 0 25px 0'
     };
   }
   _whichTab(actab, tab) {
@@ -75,5 +79,8 @@ export default class App extends React.Component {
           display: tab===actab ? 'block' : 'none'
         };
     }
+  }
+  _setRsrcs(resources) {
+    this.setState({resources: resources});
   }
 }
