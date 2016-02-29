@@ -28,16 +28,19 @@ export default class Login extends React.Component {
       err = true;
     }
     return (
-      <div style={displayLogin} className='panel panel-primary'>
-        <div className='col-sm-12'>
-          <h4 className='col-sm-offset-1 col-sm-4'> UCCX Login </h4>
-          <button
-            disabled
-            style={{display: err ? 'block': 'none'}}
-            className='col-sm-offset-10 btn btn-danger'>
-            <span className='badge'>Auth Error</span>
-          </button>
+      <div style={displayLogin} className='panel panel-default'>
+        <div className='panel-heading' style={{textAlign: 'center'}}>
+          <strong style={{fontSize: '1.2em'}}>UCCX Login</strong>
         </div>
+        <a className='col-sm-offset-1'
+           style={{
+             display: err ? 'block': 'none',
+             marginTop: '20px',
+             marginBottom: '20px'
+           }}>
+          <span style={{fontSize: '1.1em'}}
+                className='badge'>Authentication Error</span>
+        </a>
         <div
           style={{margin: '20px 20px 20px 20px'}}
           className='form-horizontal'>
@@ -76,11 +79,12 @@ export default class Login extends React.Component {
           </div>
           <div className='form-group'>
             <div className='col-sm-offset-2 col-sm-10'>
-              <button
-                className='btn btn-sm btn-primary'
+              <a
+                style={{color: 'green', fontSize: '1.5em'}}
+                className='glyphicon glyphicon-log-in'
                 onClick={this.handleLogin}>
-                Sign In
-              </button>
+                {/*<strong style={{marginLeft: '10px'}}>LOGIN</strong>*/}
+              </a>
             </div>
           </div>
         </div>
