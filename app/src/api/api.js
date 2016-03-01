@@ -5,6 +5,7 @@ var EventEmitter = require('events').EventEmitter,
 // Global Events
 global.loginEvt = new EventEmitter();
 global.loggedIn = new EventEmitter();
+global.skillEvt = new EventEmitter();
 
 // Global VARs
 global.credentials = {};
@@ -27,3 +28,9 @@ loginEvt.on('login', (creds) => {
     })
     .catch(err => loggedIn.emit('loginError', err))
 });
+
+
+skillEvt.on('skills', skills => {
+  var ccxSkills = skills.map(skill => skill.skillName);
+  skillEvt.emit('skillsList', ccxSkills);
+})
