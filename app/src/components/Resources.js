@@ -6,7 +6,7 @@ export default class Resources extends React.Component {
     super(props);
     this.state = {
       resources: null,
-      tns: null
+      agentSelectSkill: null
     };
     this._renderAgents = this._renderAgents.bind(this);
   }
@@ -42,6 +42,8 @@ export default class Resources extends React.Component {
         <ResourceTn key={idx}
                     index={idx}
                     agent={agent}
+                    setAgentSkill={this._setAgentSel.bind(this)}
+                    agentSelectSkill={this.state.agentSelectSkill}
                     onExpand={this._expand.bind(this)}/>
       );
     });
@@ -50,5 +52,8 @@ export default class Resources extends React.Component {
     var resources = this.state.resources;
     resources[index] = agent;
     this.setState({resources : resources});
+  }
+  _setAgentSel(userId) {
+    this.setState({agentSelectSkill: userId});
   }
 }
