@@ -27,6 +27,7 @@ export default class Skills extends React.Component {
         );
       });
       skillData.push(this._skillButton());
+      skillEvt.emit('skills', skills.skill);
       this.setState({
         skills: skills.skill,
         skillData: skillData
