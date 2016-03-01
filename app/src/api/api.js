@@ -8,7 +8,7 @@ global.loggedIn = new EventEmitter();
 
 // Global VARs
 global.credentials = {};
-global.uccx = Object;
+global.uccx = null;
 
 loginEvt.on('login', (creds) => {
   // Verify We Can Login to UCCX Server
