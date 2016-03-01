@@ -7,7 +7,7 @@ export default class ResourceTn extends React.Component {
         idx = this.props.index,
         expand = `glyphicon glyphicon-${!agent.expand ? 'expand' : 'collapse-down'}`;
     return (
-      <div key={idx} className="col-sm-5">
+      <div key={idx} className='col-sm-7'>
         <div className="thumbnail">
           <div className="caption">
             <p style={{color: 'blue'}}>{userID}</p>
@@ -31,15 +31,30 @@ export default class ResourceTn extends React.Component {
     }
   }
   _agentDetails(agent) {
+    var actAgent = this.props.agentSelectSkill;
     return (
-      <div style={{display: (!agent.expand) ? 'none' : 'block'}}
+      <div style={{
+            display: (!agent.expand) ? 'none' : 'block',
+            marginTop: '10px'
+           }}
            className="thumbnail">
         <div className="caption">
           <p>{agent.firstName} {agent.lastName}</p>
-          <p>Skills Map</p>
-          <p>...</p>
+          <hr/>
+          <ul className='nav nav-pills'>
+            <li role='presentation'>
+              <button id={agent.userID}
+                      onClick={this._setActive.bind(this)}
+                      className={`btn btn-xs btn-${actAgent===agent.userID ? 'primary' : 'link'}`}>
+                Skills Map
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
     );
+  }
+  _setActive(e) {
+    this.props.setAgentSkill(e.target.id);
   }
 }
