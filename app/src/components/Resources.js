@@ -6,9 +6,16 @@ export default class Resources extends React.Component {
     super(props);
     this.state = {
       resources: null,
-      agentSelectSkill: null
+      agentSelectSkill: null,
+      skillGrid: <div></div>
     };
     this._renderAgents = this._renderAgents.bind(this);
+    this._renderSkillsList = this._renderSkillsList.bind(this);
+  }
+  componentDidMount() {
+    skillEvt.on('skillsList', skills => {
+      this._renderSkillsList(skills);
+    });
   }
   componentDidUpdate(newProps, newState) {
     if(this.props.loggedIn) {
@@ -31,8 +38,13 @@ export default class Resources extends React.Component {
       agentTN = this.state.resources;
     }
     return (
-      <div className="row col-sm-offset-3">
-        {agentTN ? this._renderAgents(agentTN) : <div></div>}
+      <div className='row'>
+        <div className='col-sm-offset-3'>
+          {agentTN ? this._renderAgents(agentTN) : <div></div>}
+        </div>
+        <div className='col-sm-offset-8'>
+          {this.state.skillGrid}
+        </div>
       </div>
     );
   }
@@ -55,5 +67,38 @@ export default class Resources extends React.Component {
   }
   _setAgentSel(userId) {
     this.setState({agentSelectSkill: userId});
+  }
+  _renderSkillsList(ccxSkills) {
+    ccxSkills.push(undefined);
+    var skillTxtArea = (
+      <div style={{
+          border: '1px solid grey',
+          margin: '0 35px 0 35px'
+        }}>
+        <h5 style={{marginLeft: '10px'}}>UCCX Skills</h5>
+        <div className='form-horizontal'>
+          {ccxSkills.map((skill, i) => {
+            if(skill) {
+              return (
+                <div key={i} style={{border:'none'}} className='form-control'>
+                <button
+                  className='btn btn-md btn-link'>
+                  {skill}
+                </button>
+                </div>
+              )
+            } else {
+              return (
+                <div key={i} style={{border:'none'}} className='form-control'>
+                  <button className='btn btn-xs btn-block glyphicon glyphicon-menu-left'>
+                  </button>
+                </div>
+              );
+            }
+          })}
+        </div>
+      </div>
+    );
+    this.setState({skillGrid: skillTxtArea});
   }
 }
