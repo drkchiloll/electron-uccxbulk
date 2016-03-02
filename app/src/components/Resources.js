@@ -90,7 +90,10 @@ export default class Resources extends React.Component {
             } else {
               return (
                 <div key={i} style={{border:'none'}} className='form-control'>
-                  <button className='btn btn-xs btn-block glyphicon glyphicon-menu-left'>
+                  <button className='btn btn-xs btn-block'>
+                    <span className='glyphicon glyphicon-chevron-left'></span>
+                    <span className='glyphicon glyphicon-chevron-left'></span>
+                    <span className='glyphicon glyphicon-chevron-left'></span>
                   </button>
                 </div>
               );
