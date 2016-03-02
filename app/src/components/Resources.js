@@ -7,7 +7,8 @@ export default class Resources extends React.Component {
     this.state = {
       resources: null,
       agentSelectSkill: null,
-      skillGrid: <div></div>
+      selectedSkills: [],
+      skillGrid: <div></div>,
     };
     this._renderAgents = this._renderAgents.bind(this);
     this._renderSkillsList = this._renderSkillsList.bind(this);
@@ -81,10 +82,13 @@ export default class Resources extends React.Component {
             if(skill) {
               return (
                 <div key={i} style={{border:'none'}} className='form-control'>
-                <button
-                  className='btn btn-md btn-link'>
-                  {skill}
-                </button>
+                  <button
+                    id={skill}
+                    style={{outline: '0'}}
+                    onClick={this._setSelSkill.bind(this)}
+                    className='btn btn-sm btn-link'>
+                    {skill}
+                  </button>
                 </div>
               )
             } else {
@@ -103,5 +107,22 @@ export default class Resources extends React.Component {
       </div>
     );
     this.setState({skillGrid: skillTxtArea});
+  }
+  _setSelSkill(e) {
+    var selSkills = this.state.selectedSkills;
+    var skillSelBtn = e.target,
+        skill = skillSelBtn.id;
+    var elemClass = skillSelBtn.getAttribute('class');
+    if(elemClass.includes('btn-primary')) {
+      var index = selSkills.findIndex(selSkill => skill === selSkill);
+      selSkills.splice(index, 1);
+      // console.log(selSkills);
+      skillSelBtn.setAttribute('class', 'btn btn-sm btn-link');
+      this.setState({selectedSkills: selSkills});
+    } else {
+      selSkills.push(skill);
+      skillSelBtn.setAttribute('class', 'btn btn-sm btn-primary');
+      this.setState({selectedSkills: selSkills});
+    }
   }
 }
