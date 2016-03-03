@@ -6,8 +6,9 @@ export default class Resources extends React.Component {
     super(props);
     this.state = {
       resources: null,
-      agentSelectSkill: null,
+      selectedAgents: null,
       selectedSkills: [],
+      agentToSkills: null,
       skillGrid: <div></div>,
     };
     this._renderAgents = this._renderAgents.bind(this);
@@ -25,6 +26,7 @@ export default class Resources extends React.Component {
           //set an expand property on the resources
           var resources = rsrcs.resource.map(rsrc => {
             rsrc.expand = false;
+            rsrc.skillsToAdd = [];
             return rsrc;
           });
           this.props.onRsrcs(resources);
@@ -32,6 +34,7 @@ export default class Resources extends React.Component {
         }).catch(err => console.log(err));
       }
     }
+    console.log(this.state.agentToSkills);
   }
   render() {
     var agentTN;
@@ -56,7 +59,7 @@ export default class Resources extends React.Component {
                     index={idx}
                     agent={agent}
                     setAgentSkill={this._setAgentSel.bind(this)}
-                    agentSelectSkill={this.state.agentSelectSkill}
+                    selectedAgents={this.state.selectedAgents}
                     onExpand={this._expand.bind(this)}/>
       );
     });
@@ -67,7 +70,7 @@ export default class Resources extends React.Component {
     this.setState({resources : resources});
   }
   _setAgentSel(userId) {
-    this.setState({agentSelectSkill: userId});
+    this.setState({selectedAgents: userId});
   }
   _renderSkillsList(ccxSkills) {
     ccxSkills.push(undefined);
@@ -81,7 +84,9 @@ export default class Resources extends React.Component {
           {ccxSkills.map((skill, i) => {
             if(skill) {
               return (
-                <div key={i} style={{border:'none'}} className='form-control'>
+                <div key={i}
+                  style={{border:'none'}}
+                  className='form-control'>
                   <button
                     id={skill}
                     style={{outline: '0'}}
@@ -94,7 +99,8 @@ export default class Resources extends React.Component {
             } else {
               return (
                 <div key={i} style={{border:'none'}} className='form-control'>
-                  <button className='btn btn-xs btn-block'>
+                  <button className='btn btn-xs btn-block'
+                    onClick={this._pushSkillsToAgents.bind(this)}>
                     <span className='glyphicon glyphicon-chevron-left'></span>
                     <span className='glyphicon glyphicon-chevron-left'></span>
                     <span className='glyphicon glyphicon-chevron-left'></span>
@@ -124,5 +130,17 @@ export default class Resources extends React.Component {
       skillSelBtn.setAttribute('class', 'btn btn-sm btn-primary');
       this.setState({selectedSkills: selSkills});
     }
+  }
+  _pushSkillsToAgents() {
+    var selectedSkills = this.state.selectedSkills,
+        selectedAgents = this.state.selectedAgents,
+        resources = this.state.resources;
+    var rsrcIndex=resources.findIndex(resrc => resrc.userID===selectedAgents);
+    var rsrc = resources[rsrcIndex];
+    selectedSkills.forEach(skill => {
+      rsrc.skillsToAdd.push(skill);
+    });
+    resources[rsrcIndex] = rsrc;
+    this.props.onRsrcs(resources);
   }
 }
